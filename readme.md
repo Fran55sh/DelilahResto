@@ -72,7 +72,7 @@ $ npm run dev
 
 ### Consideraciones generales de la API
 
-Dentro de las sentencias SQL esta la creacion del un usuario de prueba con permisos de administrador
+Dentro de las sentencias SQL esta la creacion de un usuario de prueba con permisos de administrador
 ```
 Usuario: admin
 Password: admin1234
