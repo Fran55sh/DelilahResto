@@ -84,7 +84,7 @@ INSERT INTO delilah.status
 (status)
 VALUES('delivered');
 
-insert into paytypes values (null, 'Efectivo');
-insert into paytypes values (null, 'Tarjeta de Debito');
-insert into paytypes values (null, 'Tarjeta de Credito');
-insert into paytypes values (null, 'Trasferencia');
+insert into paytypes values (null, 'casg');
+insert into paytypes values (null, 'Debit Card');
+insert into paytypes values (null, 'Credit Card');
+insert into paytypes values (null, 'Bank Transfer');
