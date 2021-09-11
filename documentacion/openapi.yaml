@@ -1,0 +1,846 @@
+openapi: 3.0.2
+info:
+  description: api created to handle restaurant orders. consists of a CRUD that manages users products and orders
+  version: 1.0.0-oas3
+  title: Delilah Resto
+  contact:
+    email: corvattafranco@gmail.com
+servers:
+- url: http://localhost:3000
+tags:
+- name: login
+  description: login module
+- name: users
+  description: users module
+- name: products
+  description: products module
+- name: orders
+  description: orders module  
+ 
+paths:
+  /login:
+    post:
+      tags:
+      - login
+      summary: user login and authentication
+      requestBody:
+        description: send user name and passwors to get authentication token
+        content:
+          application/json:
+            schema:
+              properties:
+                user_name:
+                  type: string
+                  description: usermane
+                  example: 'admin'
+                password:
+                  type: string
+                  description: password
+                  example: 'admin1234'
+      responses:
+        200:
+          description: Login sucess
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  message: 
+                    type: string
+                    example: 'login success'
+                  token:
+                    type: string
+                    example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfaWQiOjEsImlzX2FkbWluIjoxfSwiaWF0IjoxNjI5Njg2ODYzfQ.mERLCIvdSrcinZBEiyxagu_aLxSdyUGpYgdNnocgfi4'
+                  data:
+                    $ref: '#/components/schemas/user'
+        401:
+          $ref: '#/components/responses/401' 
+        500:
+          $ref: '#/components/responses/500' 
+  /users:
+    post:
+      tags:
+      - users
+      summary: created new user
+      requestBody:
+        description: send user data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+      responses:
+        201:
+          description: user created
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 201
+                  message:
+                    type: string
+                    example: 'user created'
+                  data:
+                    type: object
+                    properties:
+                      user_id:
+                        type: integer
+                        example: 2
+        401:
+          $ref: '#/components/responses/401' 
+        409:
+          $ref: '#/components/responses/409'
+        400:
+          $ref: '#/components/responses/400'
+        500:
+          $ref: '#/components/responses/500' 
+    get:
+      tags:
+      - users
+      summary: list all users
+      description: "endopint accesible only for Admin"
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: ok
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  data:
+                    type: array
+                    items:
+                       $ref: '#/components/schemas/user'
+                
+        401:
+          $ref: '#/components/responses/401' 
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500' 
+  /users/{user_id}:
+    get:
+      tags:
+      - users
+      summary: get user by id
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: user_id
+        in: path
+        description: user id
+        required: true
+        schema: 
+          type: integer
+      responses:
+        200:
+          description: ok
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  data:
+                    $ref: '#/components/schemas/user'
+        401:
+          $ref: '#/components/responses/401' 
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500' 
+    put:
+      tags:
+      - users
+      summary:  update user
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: user_id
+        in: path
+        description: user id
+        required: true
+        schema: 
+          type: integer
+      requestBody:
+        description: user data to update
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_name:
+                  type: string
+                  example: 'franco' 
+                phone:
+                  type: string
+                  example: '154123654'
+                address:
+                  type: string
+                  example: 'aguado 1234'
+                password:
+                  type: string
+                  example: "123456789"
+
+      responses:
+        202:
+          description: ok
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 202
+                  message:
+                    type: string
+                    example: 'user updated'
+        401:
+          $ref: '#/components/responses/401' 
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+        400:
+          $ref: '#/components/responses/400'
+        500:
+          $ref: '#/components/responses/500' 
+    delete:
+      tags:
+      - users
+      summary: delete user by id
+      description: "endopint accesible only for Admin"
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: user_id
+        in: path
+        description: user id
+        required: true
+        schema: 
+          type: integer
+      responses:
+        202:
+          description: accepted
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 202
+                  message:
+                    type: string
+                    example: 'user deleted'
+        401:
+          $ref: '#/components/responses/401' 
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500'
+  /users/{user_id}/order:
+    get:
+      tags:
+      - users
+      summary: get order by user id
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: user_id
+        in: path
+        description: user id
+        required: true
+        schema: 
+          type: integer
+      responses:
+        200:
+          description: ok
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  data:
+                    type: array
+                    items:
+                       $ref: '#/components/schemas/order'
+             
+        401:
+          $ref: '#/components/responses/401' 
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500'  
+  
+  /products:
+    post:
+      tags:
+      - products
+      summary: create new product
+      description: "endopint accesible only for Admin"
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: send product data 
+        content:
+          application/json:
+            schema:
+              properties:
+                url_img:
+                  type: string
+                  example: 'https://imgurl.jpg'
+                name:
+                  type: string
+                  example: 'hamburguer'
+                price:
+                  type: integer
+                  example: 60
+      responses:
+        201:
+          description: created
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 201
+                  message:
+                    type: string
+                    example: 'product created'
+                  data:
+                    type: object
+                    properties: 
+                      product_id:
+                        type: integer
+                        example: 2
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        400:
+          $ref: '#/components/responses/400'
+        500:
+          $ref: '#/components/responses/500'
+    get:
+      tags:
+      - products
+      summary: list all products
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: ok
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/product'
+
+        401:
+          $ref: '#/components/responses/401' 
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500'           
+  /products/{product_id}:
+    get:
+      tags:
+      - products
+      summary: get product by id
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: product_id
+        in: path
+        description: product id
+        required: true
+        schema: 
+          type: integer
+      responses:
+        200:
+          description: ok
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  data:
+                      $ref: '#/components/schemas/product'
+        401:
+          $ref: '#/components/responses/401' 
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500' 
+    put:
+      tags:
+      - products
+      summary:  update data product
+      security:
+        - bearerAuth: []
+      description: "endopint accesible only for Admin"
+      parameters:
+      - name: product_id
+        in: path
+        description: product id
+        required: true
+        schema: 
+          type: integer
+      requestBody:
+        description: send user product to update
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url_img:
+                  type: string
+                  example: 'https://imgurl.jpg'
+                name:
+                  type: string
+                  example: 'hamburguer'
+                price:
+                  type: integer
+                  example: 50
+      responses:
+        202:
+          description: accepted
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 202
+                  message:
+                    type: string
+                    example: 'product update'
+        401:
+          $ref: '#/components/responses/401' 
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+        400:
+          $ref: '#/components/responses/400'
+        500:
+          $ref: '#/components/responses/500' 
+    delete:
+      tags:
+      - products
+      summary: delete product by id
+      description: "endopint accesible only for Admin"
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: product_id
+        in: path
+        description: product id
+        required: true
+        schema: 
+          type: integer
+      responses:
+        202:
+          description: accepted
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 202
+                  message:
+                    type: string
+                    example: 'product deleted'
+        401:
+          $ref: '#/components/responses/401' 
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500' 
+  /orders:
+    post:
+      tags:
+      - orders
+      summary: create new order
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: send order data 
+        content:
+          application/json:
+            schema:
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                date_time:
+                  type: string
+                  format: date-time
+                  example: '2021-08-14 23:54:06'
+                total:
+                  type: integer
+                  format: double
+                  example: 120
+                user:
+                  $ref: '#/components/schemas/user'
+                Status:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    name:
+                      type: string
+                      example: 'Confirmed'
+                paytypes:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    description:
+                      type: string
+                      example: 'cash'
+      responses:
+        201:
+          description: created
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 201
+                  message:
+                    type: string
+                    example: 'order created'
+                  data:
+                    type: object
+                    properties: 
+                      order_id:
+                        type: integer
+                        example: 2
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        400:
+          $ref: '#/components/responses/400'
+        500:
+          $ref: '#/components/responses/500'
+    get:
+      tags:
+      - orders
+      summary: list all orders
+      description: "endopint accesible only for Admin"
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: ok
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  data:
+                    type: array
+                    items:
+                       $ref: '#/components/schemas/order'
+
+        401:
+          $ref: '#/components/responses/401' 
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500'  
+  /orders/{order_id}:
+    put:
+      tags:
+      - orders
+      summary:  update order
+      security:
+        - bearerAuth: []
+      description: "endopint accesible only for Admin"
+      parameters:
+      - name: order_id
+        in: path
+        description: order id
+        required: true
+        schema: 
+          type: integer
+      requestBody:
+        description: send data to update an order
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                date_time:
+                  type: string
+                  format: date-time
+                  example: '2021/08/21'
+                status_id:
+                  type: integer
+                  example:  1
+                pay_type_id: 
+                  type: integer
+                  example: 2
+      responses:
+        202:
+          description: accepted
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 202
+                  message:
+                    type: string
+                    example: 'order updated'
+        401:
+          $ref: '#/components/responses/401' 
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+        400:
+          $ref: '#/components/responses/400'
+        500:
+          $ref: '#/components/responses/500' 
+    delete:
+      tags:
+      - orders
+      summary: delete order by id
+      description: "endopint accesible only for Admin"
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: order_id
+        in: path
+        description: order id
+        required: true
+        schema: 
+          type: integer
+      responses:
+        202:
+          description: accepted
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 202
+                  message:
+                    type: string
+                    example: 'order deleted'
+        401:
+          $ref: '#/components/responses/401' 
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500'      
+components:
+  responses:
+    404:
+      description:   Requested element was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    401:
+      description: failed to provide a valid user name/password
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    403:
+      description: user doesnt have permition to access the server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    400:
+      description: a required body parameter is not provided
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    409:
+      description: confilct with data provided
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    500:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+  schemas:
+    user:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 4
+        user_name:
+          type: string
+          example: 'admin'
+        first_name:
+          type: string
+          example: 'franco'
+        last_name:
+          type: string
+          example: 'corvatta'  
+        email:
+          type: string
+          example: 'admin@gmail.com'
+        phone:
+          type: string
+          example: '15412312'
+        address:
+          type: string
+          example: 'colon 12358'
+        is_admin:
+          type: boolean
+          example: false
+    error:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 401
+        error:
+          type: string
+          example: 'Invalid username or password.'
+    product:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 4
+        name:
+          type: string
+          example: 'hamburguer'
+        price:
+          type: integer
+          example: 60
+    order:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        date_time:
+          type: string
+          format: date-time
+          example: '2021-08-14 23:54:06'
+        total:
+          type: integer
+          format: double
+          example: 120
+        user:
+          $ref: '#/components/schemas/user'
+        Status:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 1
+            name:
+              type: string
+              example: 'Confirmed'
+        paytypes:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 1
+            description:
+              type: string
+              example: 'cash'
+        orders_has_products:
+          type: array
+          items:
+            type: object
+            properties:
+              product_id:
+                type: integer
+                example: 3
+              amount:
+                type: integer
+                example: 2
+              price:
+                type: integer
+                format: double
+                example: 250
+              details:
+                type: string
+                example: 'extra bacon'
+              products:
+                type: object
+                properties:
+                  description:
+                    type: string
+                    example: 'hamburguer'
+  securitySchemes:
+    bearerAuth:             
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    
