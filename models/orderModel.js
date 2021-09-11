@@ -4,7 +4,7 @@ const connection = require('../conection')
 const statusModel = require('./statusModel')
 const userModel = require('./userModel')
 const placedOrderModel = require('./placedOrderModel')
-const paytypes = require('./payment_types')
+const paytypes = require('./paymentTypes')
 
 const orderModel = connection.define(
     'orders',
