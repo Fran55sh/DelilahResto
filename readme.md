@@ -21,6 +21,7 @@ Debes tener instalado lo siguiente para poder inicializar el proyecto
     - jsonwebtoken
     - mysql2
     - sequelize
+    - sequelize-cli
     - yamljs
     - swagger-ui-express
 
@@ -32,13 +33,25 @@ $ npm install
 
 ### Base de Datos
 
-Para la creacion de la base de datos se debe utilizar algun gestor de bases de datos y ejecutar el siguiente comando.
+Utilizar algun gestor de bases de datos y ejecutar el siguiente comando.
 
 ```
 CREATE DATABASE delilah;
 ```
 
-En la raiz del repositorio encontras la carpeta *database* y dentro de ella el archivo *database.sql* donde se encuentran las sentencias SQL que deberas ejecutar en tu gestor de base de datos
+para la creacion de la base de datos se implemento sequelize-cli. Al ejecutar el siguiente comando se crearan todas las tablas
+
+```
+$ npx sequelize-cli db:migrate
+```
+
+ejecutando el siguiente comando 
+
+```
+$ npx sequelize-cli db:seed:all
+```
+
+Se creara el usuario de prueba y algunos datos necesarios para que la aplicacion funcione correctamente
 
 ### Servidor
 
@@ -72,7 +85,7 @@ $ npm run dev
 
 ### Consideraciones generales de la API
 
-Dentro de las sentencias SQL esta la creacion de un usuario de prueba con permisos de administrador
+Datos del usuario administrador de prueba
 ```
 Usuario: admin
 Password: admin1234

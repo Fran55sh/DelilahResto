@@ -10,9 +10,8 @@ create table users(
 	email varchar(45) not null,
 	password varchar(45) not null,
 	phone varchar(45) not null,
-	address varchar(45),
-	is_admin bool default false,
-	FOREIGN KEY (is_admin) REFERENCES roles(id)
+	address varchar(45), not null,
+	is_admin bool not null default false,
 )
 
 create table products(

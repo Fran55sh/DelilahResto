@@ -4,6 +4,7 @@
   "description": "API for food orders. As a customer you can register, see products and place an order. Restaurant administrators have the ability to receive orders and update them",
   "main": "index.js",
   "scripts": {
+    "migrate": "sequelize-cli db:migrate",
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -29,6 +30,7 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.7",
+    "sequelize-cli": "^6.2.0",
     "swagger-ui-express": "^4.1.6",
     "yamljs": "^0.3.0"
   }

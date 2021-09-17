@@ -30,6 +30,5 @@ const placedOrderModel = connection.define(
     {timestamps: false}           
 );
 
-// placedOrderModel.belongsTo(orderModel, { as: 'orders', foreignKey: 'order_id' });
 placedOrderModel.belongsTo(productModel, { as: 'products', foreignKey: 'product_id' });
 module.exports = placedOrderModel;
