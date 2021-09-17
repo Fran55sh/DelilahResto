@@ -1,10 +1,8 @@
 require("dotenv").config();
 const orderModel = require("../models/orderModel");
 const userModel = require("../models/userModel");
-const statusModel = require("../models/statusModel");
 const placedOrderModel = require("../models/placedOrderModel");
 const productModel = require("../models/productModel");
-const paytypes = require("../models/paymentTypes");
 
 class Orders {
   static async getAllorders(req, res) {
