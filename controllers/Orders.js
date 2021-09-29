@@ -111,8 +111,8 @@ class Orders {
   static async getorderById(req, res) {
     const id = req.params.id;
     try {
-      const order = await orderModel.findByPk(id, {
-        include: ["status", "user", "order"],
+      const order = await orderModel.findOne({
+        where: { id: id },
       });
       if (!order) {
         return res.status(404).json({
@@ -124,10 +124,10 @@ class Orders {
         stasus: 200,
         data: order,
       });
-    } catch (error) {
+    } catch (err) {
       return res.status(500).json({
         status: 500,
-        error,
+        err,
       });
     }
   }

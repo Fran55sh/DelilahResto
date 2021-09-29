@@ -5,7 +5,7 @@ const connection = require('../conection')
 const statusModel = connection.define(
     'status',
     {
-        status: {
+        name: {
             type: DataTypes.STRING
         }
     },

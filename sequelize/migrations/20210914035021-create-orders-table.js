@@ -28,7 +28,7 @@ module.exports = {
       },
       pay_type_id: {
         type: sequelize.INTEGER,
-        references: {model:'pay_types', key: 'id'}
+        references: {model:'paytypes', key: 'id'}
       }
     })
   },

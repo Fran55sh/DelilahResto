@@ -10,8 +10,8 @@ create table users(
 	email varchar(45) not null,
 	password varchar(45) not null,
 	phone varchar(45) not null,
-	address varchar(45), not null,
-	is_admin bool not null default false,
+	address varchar(45) not null,
+	is_admin tinyint not null default 0
 )
 
 create table products(
@@ -21,22 +21,28 @@ create table products(
 	price double not null
 )
 
-create table orders(
+CREATE TABLE paytypes (
 	id int auto_increment primary key not null,
-	status_id int,
-	user_id int not null,
-	time date,
-	total double
-	pay_type_id int not null,
-	foreign key (user_id) references users (id),
-	foreign key (status_id) references status(id)
+	name varchar(255) not null
 )
 
 create table status(
 	id int auto_increment primary key not null,
 	status varchar(45)
 )
- 
+
+create table orders(
+	id int auto_increment primary key not null,
+	status_id int,
+	user_id int not null,
+	date_time date,
+	total double,
+	pay_type_id int not null,
+	foreign key (user_id) references users (id),
+	foreign key (status_id) references status(id),
+	foreign key (pay_type_id) references paytypes(id)
+)
+
 create table placed_orders(
 	order_id int not null,
 	product_id  int not null,
@@ -48,16 +54,10 @@ create table placed_orders(
 	
 )
 
-CREATE TABLE paytypes (
-	id 	int not null primary key AUTO_INCREMENT,
-	name varchar(255) not null
-	foreign key (pay_type_id) references paytypes (id)
-)
-
 
 INSERT INTO delilah.users
 (user_name, first_Name, last_Name, email, password, phone, address, is_admin)
-VALUES('admin', 'Franco', 'Corvatta', 'corvattafranco@gmail.com', 'admin1234', '1234565', 'falcon79' 'true');
+VALUES('admin', 'Franco', 'Corvatta', 'corvattafranco@gmail.com', 'admin1234', '1234565', 'falcon79', '1');
 
 INSERT INTO delilah.status
 (status)
@@ -83,7 +83,7 @@ INSERT INTO delilah.status
 (status)
 VALUES('delivered');
 
-insert into paytypes values (null, 'casg');
+insert into paytypes values (null, 'cash');
 insert into paytypes values (null, 'Debit Card');
 insert into paytypes values (null, 'Credit Card');
 insert into paytypes values (null, 'Bank Transfer');
